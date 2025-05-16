@@ -3,51 +3,52 @@ import struct
 from enum import Enum
 
 
-class ReadParams(Enum):
-    """ Enum for the read parameters. """
-    ENCODER_VALUE = 0x30
-    RECEIVED_PULSE_COUNT = 0x33
-    MOTOR_ANGLE = 0x36
-    # etc
-
-class WriteParams(Enum):
-    """ Enum for the write parameters. """
-    CALIBRATION = 0x80
-    # etc
-
-class ZeroModeParams(Enum):
-    """ Enum for the zero mode parameters. """
-    ZERO_MODE = 0x90
-    # etc
-
-class PIDAccTorque(Enum):
-    """ Enum for the PID, Acceleration, and Torque parameters. """
-    PID_KP = 0xA0
-    PID_KI = 0xA2
-    PID_KD = 0xA3
-    # etc
-
-class Control(Enum):
-    """ Enum for the control parameters. """
-    EN_PIN_MODE = 0xF3
-    CONSTANT_SPEED = 0xF6
-    STOP = 0xF7
-    SET_ANGLE = 0xFD
-
-class Direction(Enum):
-    """ Enum for the direction parameters. """
-    CLOCKWISE = 0
-    COUNTERCLOCKWISE = 1
-
-def calculate_checksum(data: bytes) -> bytes:
-    """
-    Calculate the checksum for the given data.
-    Checksum is the lowest byte of the sum of all bytes.
-    """
-    checksum = sum(data) & 0xFF
-    return bytes([checksum])
-
 class Servo42C:
+
+    class ReadParams(Enum):
+        """ Enum for the read parameters. """
+        ENCODER_VALUE = 0x30
+        RECEIVED_PULSE_COUNT = 0x33
+        MOTOR_ANGLE = 0x36
+        # etc
+
+    class WriteParams(Enum):
+        """ Enum for the write parameters. """
+        CALIBRATION = 0x80
+        # etc
+
+    class ZeroModeParams(Enum):
+        """ Enum for the zero mode parameters. """
+        ZERO_MODE = 0x90
+        # etc
+
+    class PIDAccTorque(Enum):
+        """ Enum for the PID, Acceleration, and Torque parameters. """
+        PID_KP = 0xA0
+        PID_KI = 0xA2
+        PID_KD = 0xA3
+        # etc
+
+    class Control(Enum):
+        """ Enum for the control parameters. """
+        EN_PIN_MODE = 0xF3
+        CONSTANT_SPEED = 0xF6
+        STOP = 0xF7
+        SET_ANGLE = 0xFD
+
+    class Direction(Enum):
+        """ Enum for the direction parameters. """
+        CLOCKWISE = 0
+        COUNTERCLOCKWISE = 1
+
+    def calculate_checksum(data: bytes) -> bytes:
+        """
+        Calculate the checksum for the given data.
+        Checksum is the lowest byte of the sum of all bytes.
+        """
+        checksum = sum(data) & 0xFF
+        return bytes([checksum])
+
     def __init__(self, address=0xe0):
         self.address = address
 
@@ -64,11 +65,11 @@ class Servo42C:
         # Create the command bytes
         data = bytearray(4)
         data[0] = self.address
-        data[1] = Control.EN_PIN_MODE.value
+        data[1] = Servo42C.Control.EN_PIN_MODE.value
         data[2] = mode
 
         # Calculate the checksum
-        data[3] = calculate_checksum(data[:-1])[0]
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
 
         return bytes(data)
 
@@ -90,7 +91,7 @@ class Servo42C:
             return False
 
         # Check if the checksum is valid
-        checksum = calculate_checksum(data[:-1])
+        checksum = Servo42C.calculate_checksum(data[:-1])
         if data[2] != checksum[0]:
             return False
 
@@ -119,13 +120,13 @@ class Servo42C:
         # Create the command bytes
         data = bytearray(6)
         data[0] = self.address
-        data[1] = Control.SET_ANGLE.value
+        data[1] = Servo42C.Control.SET_ANGLE.value
         data[2] = (direction << 7) | speed
         data[3] = (pulseCount >> 8) & 0xFF
         data[4] = pulseCount & 0xFF
 
         # Calculate the checksum
-        data[5] = calculate_checksum(data[:-1])[0]
+        data[5] = Servo42C.calculate_checksum(data[:-1])[0]
 
         return bytes(data)
 
