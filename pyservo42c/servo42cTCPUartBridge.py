@@ -1,7 +1,7 @@
 import socket
 from servo42c import Servo42C
 
-class Servo42CUartBridge(Servo42C):
+class Servo42CTCPUartBridge(Servo42C):
     """
     This can be used to drive a servo42c over a UART bridge.
     Tested using github.com/oxan/esphome-stream-server on an ESP32.
