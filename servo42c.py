@@ -2,6 +2,11 @@ import socket
 from enum import Enum
 
 class Servo42C:
+    """
+    This implement the Servo42C protocol.
+    https://github.com/makerbase-mks/MKS-SERVO42C/wiki/Serial-communication-description
+    """
+
     class ReadParams(Enum):
         """ Enum for the read parameters. """
         ENCODER_VALUE = 0x30
@@ -76,6 +81,15 @@ class Servo42C:
         MA_0 = 0x00
         MA_200 = 0x01
         MA_400 = 0x02
+        MA_600 = 0x03
+        MA_800 = 0x04
+        MA_1000 = 0x05
+        MA_1200 = 0x06
+        MA_1400 = 0x07
+        MA_1600 = 0x08
+        MA_1800 = 0x09
+        MA_2000 = 0x0A
+        MA_2200 = 0x0B
         MA_2400 = 0x0C
 
     class EnPinActive(Enum):
@@ -134,7 +148,6 @@ class Servo42C:
 
     def __init__(self, address=0xe0):
         self.address = address
-
 
     def set_en_pin_mode_cmd(self, mode: int) -> bytes:
         """
@@ -587,6 +600,196 @@ class Servo42C:
     def return_to_zero_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the return_to_zero command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_pid_kp_cmd(self, kp: int) -> bytes:
+        """
+        Returns the bytes to perform a set_pid_kp command.
+        Bytes:
+            0: address
+            1: PIDAccTorque.PID_KP
+            2-3: Kp value (uint16_t)
+            4: Checksum
+        """
+        if not (0 <= kp <= 0xFFFF):
+            raise ValueError("Kp must be between 0 and 65535")
+
+        data = bytearray(5)
+        data[0] = self.address
+        data[1] = Servo42C.PIDAccTorque.PID_KP.value
+        data[2] = (kp >> 8) & 0xFF
+        data[3] = kp & 0xFF
+        data[4] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_pid_kp_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_pid_kp command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_pid_ki_cmd(self, ki: int) -> bytes:
+        """
+        Returns the bytes to perform a set_pid_ki command.
+        Bytes:
+            0: address
+            1: PIDAccTorque.PID_KI
+            2-3: Ki value (uint16_t)
+            4: Checksum
+        """
+        if not (0 <= ki <= 0xFFFF):
+            raise ValueError("Ki must be between 0 and 65535")
+
+        data = bytearray(5)
+        data[0] = self.address
+        data[1] = Servo42C.PIDAccTorque.PID_KI.value
+        data[2] = (ki >> 8) & 0xFF
+        data[3] = ki & 0xFF
+        data[4] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_pid_ki_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_pid_ki command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_pid_kd_cmd(self, kd: int) -> bytes:
+        """
+        Returns the bytes to perform a set_pid_kd command.
+        Bytes:
+            0: address
+            1: PIDAccTorque.PID_KD
+            2-3: Kd value (uint16_t)
+            4: Checksum
+        """
+        if not (0 <= kd <= 0xFFFF):
+            raise ValueError("Kd must be between 0 and 65535")
+
+        data = bytearray(5)
+        data[0] = self.address
+        data[1] = Servo42C.PIDAccTorque.PID_KD.value
+        data[2] = (kd >> 8) & 0xFF
+        data[3] = kd & 0xFF
+        data[4] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_pid_kd_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_pid_kd command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_acceleration_cmd(self, acceleration: int) -> bytes:
+        """
+        Returns the bytes to perform a set_acceleration command.
+        Bytes:
+            0: address
+            1: PIDAccTorque.ACCELERATION
+            2-3: Acceleration value (uint16_t)
+            4: Checksum
+        """
+        if not (0 <= acceleration <= 0xFFFF):
+            raise ValueError("Acceleration must be between 0 and 65535")
+
+        data = bytearray(5)
+        data[0] = self.address
+        data[1] = Servo42C.PIDAccTorque.ACCELERATION.value
+        data[2] = (acceleration >> 8) & 0xFF
+        data[3] = acceleration & 0xFF
+        data[4] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_acceleration_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_acceleration command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_max_torque_cmd(self, max_torque: int) -> bytes:
+        """
+        Returns the bytes to perform a set_max_torque command.
+        Bytes:
+            0: address
+            1: PIDAccTorque.MAX_TORQUE
+            2-3: Max torque value (uint16_t)
+            4: Checksum
+        """
+        if not (0 <= max_torque <= 0x4B0):
+            raise ValueError("Max torque must be between 0 and 1200")
+
+        data = bytearray(5)
+        data[0] = self.address
+        data[1] = Servo42C.PIDAccTorque.MAX_TORQUE.value
+        data[2] = (max_torque >> 8) & 0xFF
+        data[3] = max_torque & 0xFF
+        data[4] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_max_torque_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_max_torque command.
         Returns True if the response is valid, False otherwise.
         """
         if len(data) != 3:
