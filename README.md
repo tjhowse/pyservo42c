@@ -4,6 +4,8 @@ This is a library for interfacing to the MKS Servo42C closed-loop stepper via UA
 
 See https://github.com/makerbase-mks/MKS-SERVO42C for details on the hardware.
 
+Note the serial protocol spec claims to include a checksum at the end of response messages. This doesn't seem to be true in practice. Also the set-angle command only accepts two bytes in the "pulse number" field, not the four bytes the spec claims.
+
 ## Modules
 
 ### servo42c
