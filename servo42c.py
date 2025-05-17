@@ -1,4 +1,3 @@
-import socket
 from enum import Enum
 
 class Servo42C:
@@ -804,40 +803,3 @@ class Servo42C:
 
         return data[1] == Servo42C.Result.SUCCESS.value
 
-
-class Servo42CUartBridge(Servo42C):
-    """
-    This can be used to drive a servo42c over a UART bridge.
-    Tested using github.com/oxan/esphome-stream-server on an ESP32.
-    """
-    def __init__(self, uart_bridge_ip: str, uart_bridge_port: int, address=0xe0):
-        super().__init__(address)
-        self.uart_bridge_ip = uart_bridge_ip
-        self.uart_bridge_port = uart_bridge_port
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.connected = False
-        self.sock.settimeout(1)
-
-    def connect(self):
-        """
-        Connect to the UART bridge.
-        """
-        if self.connected:
-            return
-        try:
-            self.sock.connect((self.uart_bridge_ip, self.uart_bridge_port))
-            self.connected = True
-        except OSError as e:
-            print(f"Error connecting to UART bridge: {e}")
-            self.connected = False
-            raise
-
-    def set_angle(self, direction: Servo42C.Direction, speed: int, pulseCount: int) -> bool:
-        """
-        Set the angle of the servo.
-        """
-        self.connect()
-        data = self.set_angle_cmd(direction, speed, pulseCount)
-        self.sock.sendto(data, (self.uart_bridge_ip, self.uart_bridge_port))
-        response = self.sock.recv(1024)
-        return self.set_angle_response(response)
