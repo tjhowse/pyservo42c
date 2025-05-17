@@ -202,6 +202,9 @@ class Servo42C:
                 2: Bit 0: Direction, 1-7: Speed
                 3-4: Pulse count
                 5: Checksum
+
+            Note: The spec claims the pulse count field can be 4 bytes long, but
+            this doesn't work in testing.
         """
 
         # Check if speed is in the range 0-127
@@ -219,9 +222,6 @@ class Servo42C:
         data[2] = (direction.value << 7) | speed
         data[3] = (pulseCount >> 8) & 0xFF
         data[4] = pulseCount & 0xFF
-        # Does this command really have a variable length?
-        # The spec says the pulse count field can be 2-4 bytes.
-        # Not sure about this...
 
         # Calculate the checksum
         data[5] = Servo42C.calculate_checksum(data[:-1])[0]

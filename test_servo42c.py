@@ -18,14 +18,10 @@ class TestServo42C(unittest.TestCase):
     def test_set_angle_cmd(self):
         # Example: set_angle_cmd(0, 1, 3200) -> [e0 fd 01 00 0c 80 6a]
         result = self.servo.set_angle_cmd(Servo42C.Direction.CLOCKWISE, 1, 3200)
-        # TODO resolve this variable length issue
-        # self.assertEqual(result, bytes([0xE0, 0xFD, 0x01, 0x00, 0x00, 0x0C, 0x80, 0x6A]))
         self.assertEqual(result, bytes([0xE0, 0xFD, 0x01, 0x0C, 0x80, 0x6A]))
 
         # Example: set_angle_cmd(1, 6, 3200) -> [e0 fd 86 00 0c 80 ef]
         result = self.servo.set_angle_cmd(Servo42C.Direction.COUNTERCLOCKWISE, 6, 3200)
-        # TODO resolve this variable length issue
-        # self.assertEqual(result, bytes([0xE0, 0xFD, 0x86, 0x00, 0x00, 0x0C, 0x80, 0xEF]))
         self.assertEqual(result, bytes([0xE0, 0xFD, 0x86, 0x0C, 0x80, 0xEF]))
 
     def test_set_subdivision_cmd(self):

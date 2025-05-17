@@ -12,20 +12,24 @@ class Servo42CUartBridge(Servo42C):
         self.uart_bridge_port = uart_bridge_port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connected = False
+        self.connecting = False
         self.sock.settimeout(1)
 
     def connect(self):
         """
         Connect to the UART bridge.
         """
-        if self.connected:
+        if self.connected or self.connecting:
             return
         try:
+            self.connecting = True
             self.sock.connect((self.uart_bridge_ip, self.uart_bridge_port))
             self.connected = True
+            self.connecting = False
         except OSError as e:
             print(f"Error connecting to UART bridge: {e}")
             self.connected = False
+            self.connecting = False
             raise
 
     def set_angle(self, direction: Servo42C.Direction, speed: int, pulseCount: int) -> bool:
