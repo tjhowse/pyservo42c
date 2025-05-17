@@ -17,4 +17,4 @@ This wraps servo42c and provides an interface to a UART-over-TCP bridge, used fo
 
 ### servo42cUart
 
-This wraps servo42c and provides a direct interface to a UART port.
+This wraps servo42c and provides a direct interface to a UART port. It doesn't exist yet.
