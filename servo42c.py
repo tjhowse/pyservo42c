@@ -149,8 +149,33 @@ class Servo42C:
         self.address = address
 
         # The spec indicates that the last byte of the response is a checksum,
-        # but this often does not arrive.
+        # but this does not seem to be the case in practice.
         self.expect_checksum = expect_checksum
+
+    def verify_response(self, data: bytes, expected_length: int) -> bool:
+        """
+        Verify the response from the servo.
+        Returns True if the response is valid, False otherwise.
+        """
+
+        # Check if the response length is correct
+        if len(data) != (expected_length if self.expect_checksum else expected_length - 1):
+            print("wrong length")
+            return False
+
+        # Check if the address matches
+        if data[0] != self.address:
+            print("wrong address")
+            return False
+
+        # Check if the checksum is valid
+        if self.expect_checksum:
+            checksum = Servo42C.calculate_checksum(data[:-1])
+            if data[-1] != checksum[0]:
+                print("wrong checksum")
+                return False
+
+        return True
 
     def set_en_pin_mode_cmd(self, mode: int) -> bytes:
         """
@@ -174,28 +199,11 @@ class Servo42C:
 
     def set_en_pin_mode_response(self, data: bytes) -> bool:
         """
-            Parses the response from the servo.
-            Returns True if the response is valid, False otherwise.
-            Bytes:
-                0: address
-                1: Result (0x00: failure, 0x01: success)
-                2: Checksum
+        Parses the response from the servo for the set_en_pin_mode command.
         """
-        # Check if the response is valid
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        # Check if the address matches
-        if data[0] != self.address:
-            return False
-
-        # Check if the checksum is valid
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
-        # Check if the result is success
-        return data[1] == 0x01
+        return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_angle_cmd(self, direction: Direction, speed: int, pulseCount: int) -> bytes:
         """
@@ -234,31 +242,11 @@ class Servo42C:
 
     def set_angle_response(self, data: bytes) -> bool:
         """
-            Parses the response from the servo.
-            Returns True if the response is valid, False otherwise.
-            Bytes:
-                0: address
-                1: Result (0x00: failure, 0x01: success)
-                2: Checksum (NB: No? I'm only getting 2 bytes back)
+        Parses the response from the servo for the set_angle command.
         """
-        # Check if the response is valid
-        # if len(data) != 3:
-        if len(data) != 2:
+        if not self.verify_response(data, 3):
             return False
-
-        # Check if the address matches
-        if data[0] != self.address:
-            return False
-
-        # Check if the checksum is valid
-        # This is commented out because the motor only returns 2 bytes.
-
-        # checksum = calculate_checksum(data[:-1])
-        # if data[2] != checksum[0]:
-        #     return False
-
-        # Check if the result is success
-        return data[1] == 0x01
+        return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_subdivision_cmd(self, subdivision: int) -> bytes:
         """
@@ -283,22 +271,9 @@ class Servo42C:
     def set_subdivision_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_subdivision command.
-        Returns True if the response is valid, False otherwise.
-        Bytes:
-            0: address
-            1: Result (0x00: failure, 0x01: success)
-            2: Checksum
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_constant_speed_cmd(self, direction: Direction, speed: int) -> bytes:
@@ -324,22 +299,9 @@ class Servo42C:
     def set_constant_speed_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_constant_speed command.
-        Returns True if the response is valid, False otherwise.
-        Bytes:
-            0: address
-            1: Result (0x00: failure, 0x01: success)
-            2: Checksum
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def stop_cmd(self) -> bytes:
@@ -360,22 +322,9 @@ class Servo42C:
     def stop_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the stop command.
-        Returns True if the response is valid, False otherwise.
-        Bytes:
-            0: address
-            1: Result (0x00: failure, 0x01: success)
-            2: Checksum
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_motor_type_cmd(self, motor_type: MotorType) -> bytes:
@@ -398,22 +347,9 @@ class Servo42C:
     def set_motor_type_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_motor_type command.
-        Returns True if the response is valid, False otherwise.
-        Bytes:
-            0: address
-            1: Result (0x00: failure, 0x01: success)
-            2: Checksum
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_work_mode_cmd(self, mode: WorkMode) -> bytes:
@@ -436,18 +372,9 @@ class Servo42C:
     def set_work_mode_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_work_mode command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def calibrate_cmd(self) -> bytes:
@@ -470,18 +397,9 @@ class Servo42C:
     def calibrate_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the calibration command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_current_gear_cmd(self, gear: CurrentGear) -> bytes:
@@ -504,18 +422,9 @@ class Servo42C:
     def set_current_gear_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_current_gear command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_baud_rate_cmd(self, baud_rate: BaudRate) -> bytes:
@@ -538,18 +447,9 @@ class Servo42C:
     def set_baud_rate_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_baud_rate command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_zero_mode_cmd(self, mode: ZeroMode) -> bytes:
@@ -572,18 +472,9 @@ class Servo42C:
     def set_zero_mode_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_zero_mode command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def return_to_zero_cmd(self) -> bytes:
@@ -606,18 +497,9 @@ class Servo42C:
     def return_to_zero_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the return_to_zero command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_pid_kp_cmd(self, kp: int) -> bytes:
@@ -644,18 +526,9 @@ class Servo42C:
     def set_pid_kp_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_pid_kp command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_pid_ki_cmd(self, ki: int) -> bytes:
@@ -682,18 +555,9 @@ class Servo42C:
     def set_pid_ki_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_pid_ki command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_pid_kd_cmd(self, kd: int) -> bytes:
@@ -720,18 +584,9 @@ class Servo42C:
     def set_pid_kd_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_pid_kd command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_acceleration_cmd(self, acceleration: int) -> bytes:
@@ -758,18 +613,9 @@ class Servo42C:
     def set_acceleration_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_acceleration command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def set_max_torque_cmd(self, max_torque: int) -> bytes:
@@ -796,18 +642,9 @@ class Servo42C:
     def set_max_torque_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_max_torque command.
-        Returns True if the response is valid, False otherwise.
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
     def save_or_clear_status_cmd(self, action: SaveOrClearStatus) -> bytes:
@@ -830,21 +667,8 @@ class Servo42C:
     def save_or_clear_status_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the save_or_clear_status command.
-        Returns True if the response is valid, False otherwise.
-        Bytes:
-            0: address
-            1: Result (0x00: failure, 0x01: success)
-            2: Checksum
         """
-        if len(data) != 3:
+        if not self.verify_response(data, 3):
             return False
-
-        if data[0] != self.address:
-            return False
-
-        checksum = Servo42C.calculate_checksum(data[:-1])
-        if data[2] != checksum[0]:
-            return False
-
         return data[1] == Servo42C.Result.SUCCESS.value
 
