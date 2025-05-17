@@ -55,6 +55,75 @@ class Servo42C:
         CLOCKWISE = 0
         COUNTERCLOCKWISE = 1
 
+    class Result(Enum):
+        """ Enum for common result values. """
+        SUCCESS = 0x01
+        FAILURE = 0x00
+
+    class MotorType(Enum):
+        """ Enum for motor types. """
+        DEGREE_0_9 = 0x00
+        DEGREE_1_8 = 0x01
+
+    class WorkMode(Enum):
+        """ Enum for work modes. """
+        CR_OPEN = 0x00
+        CR_VFOC = 0x01
+        CR_UART = 0x02
+
+    class CurrentGear(Enum):
+        """ Enum for current gear values. """
+        MA_0 = 0x00
+        MA_200 = 0x01
+        MA_400 = 0x02
+        MA_2400 = 0x0C
+
+    class EnPinActive(Enum):
+        """ Enum for En pin active states. """
+        ACTIVE_LOW = 0x00
+        ACTIVE_HIGH = 0x01
+        ACTIVE_ALWAYS = 0x02
+
+    class AutoScreenOff(Enum):
+        """ Enum for auto screen off states. """
+        DISABLE = 0x00
+        ENABLE = 0x01
+
+    class StallProtection(Enum):
+        """ Enum for stall protection states. """
+        DISABLE = 0x00
+        ENABLE = 0x01
+
+    class SubdivisionInterpolation(Enum):
+        """ Enum for subdivision interpolation states. """
+        DISABLE = 0x00
+        ENABLE = 0x01
+
+    class BaudRate(Enum):
+        """ Enum for baud rate values. """
+        BAUD_9600 = 0x01
+        BAUD_19200 = 0x02
+        BAUD_25000 = 0x03
+        BAUD_38400 = 0x04
+        BAUD_57600 = 0x05
+        BAUD_115200 = 0x06
+
+    class ZeroMode(Enum):
+        """ Enum for zero mode states. """
+        DISABLE = 0x00
+        DIR_MODE = 0x01
+        NEAR_MODE = 0x02
+
+    class ZeroDirection(Enum):
+        """ Enum for zero direction values. """
+        CW = 0x00
+        CCW = 0x01
+
+    class SaveOrClearStatus(Enum):
+        """ Enum for save or clear status values. """
+        SAVE = 0xC8
+        CLEAR = 0xCA
+
     def calculate_checksum(data: bytes) -> bytes:
         """
         Calculate the checksum for the given data.
