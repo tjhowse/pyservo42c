@@ -397,6 +397,210 @@ class Servo42C:
 
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def set_work_mode_cmd(self, mode: WorkMode) -> bytes:
+        """
+        Returns the bytes to perform a set_work_mode command.
+        Bytes:
+            0: address
+            1: WriteParams.SET_WORK_MODE
+            2: Mode (0x00: CR_OPEN, 0x01: CR_VFOC, 0x02: CR_UART)
+            3: Checksum
+        """
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.WriteParams.SET_WORK_MODE.value
+        data[2] = mode.value
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_work_mode_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_work_mode command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def calibrate_cmd(self) -> bytes:
+        """
+        Returns the bytes to perform a calibration command.
+        Bytes:
+            0: address
+            1: WriteParams.CALIBRATION
+            2: 0x00
+            3: Checksum
+        """
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.WriteParams.CALIBRATION.value
+        data[2] = 0x00
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def calibrate_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the calibration command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_current_gear_cmd(self, gear: CurrentGear) -> bytes:
+        """
+        Returns the bytes to perform a set_current_gear command.
+        Bytes:
+            0: address
+            1: WriteParams.SET_CURRENT_GEAR
+            2: Gear (0x00: 0mA, 0x01: 200mA, ..., 0x0C: 2400mA)
+            3: Checksum
+        """
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.WriteParams.SET_CURRENT_GEAR.value
+        data[2] = gear.value
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_current_gear_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_current_gear command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_baud_rate_cmd(self, baud_rate: BaudRate) -> bytes:
+        """
+        Returns the bytes to perform a set_baud_rate command.
+        Bytes:
+            0: address
+            1: WriteParams.SET_BAUD_RATE
+            2: Baud rate (0x01: 9600, 0x02: 19200, ..., 0x06: 115200)
+            3: Checksum
+        """
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.WriteParams.SET_BAUD_RATE.value
+        data[2] = baud_rate.value
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_baud_rate_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_baud_rate command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_zero_mode_cmd(self, mode: ZeroMode) -> bytes:
+        """
+        Returns the bytes to perform a set_zero_mode command.
+        Bytes:
+            0: address
+            1: ZeroModeParams.ZERO_MODE
+            2: Mode (0x00: Disable, 0x01: DirMode, 0x02: NearMode)
+            3: Checksum
+        """
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.ZeroModeParams.ZERO_MODE.value
+        data[2] = mode.value
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_zero_mode_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_zero_mode command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def return_to_zero_cmd(self) -> bytes:
+        """
+        Returns the bytes to perform a return_to_zero command.
+        Bytes:
+            0: address
+            1: ZeroModeParams.RETURN_TO_ZERO
+            2: 0x00
+            3: Checksum
+        """
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.ZeroModeParams.RETURN_TO_ZERO.value
+        data[2] = 0x00
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def return_to_zero_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the return_to_zero command.
+        Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
 
 class Servo42CUartBridge(Servo42C):
     """
