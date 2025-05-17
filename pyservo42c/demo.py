@@ -8,7 +8,6 @@ UART_BRIDGE_PORT = 6638
 
 def run_uart_test():
     s = Servo42CTCPUartBridge(UART_BRIDGE_IP, UART_BRIDGE_PORT)
-    s.connect()
     while True:
         try:
             while True:
@@ -23,14 +22,18 @@ def run_uart_test():
                     print("Failed to stop")
                 sleep(1)
 
-                if not s.set_angle(Servo42CTCPUartBridge.Direction.CLOCKWISE, 100, 200*16):
+                if not s.set_angle(Servo42CTCPUartBridge.Direction.CLOCKWISE, 127, 200*16):
                     print("Failed to set angle")
-                sleep(1)
+                sleep(0.5)
+
+                if not s.set_angle(Servo42CTCPUartBridge.Direction.COUNTERCLOCKWISE, 127, 100*16):
+                    print("Failed to set angle")
+                sleep(0.5)
 
         except OSError as e:
             print(f"Error: Could not connect to the UART bridge: {e}")
             sleep(1)
-            s.connect()
+            s.disconnect()
 
 if __name__ == "__main__":
     run_uart_test()

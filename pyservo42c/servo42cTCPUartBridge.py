@@ -31,6 +31,13 @@ class Servo42CTCPUartBridge(Servo42C):
             self.connected = False
             self.connecting = False
             raise
+    def disconnect(self):
+        """
+        Disconnect from the UART bridge.
+        """
+        if self.connected:
+            self.sock.close()
+            self.connected = False
 
     def set_angle(self, direction: Servo42C.Direction, speed: int, pulseCount: int) -> bool:
         """

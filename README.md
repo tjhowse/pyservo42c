@@ -1,6 +1,6 @@
 # pyservo42c
 
-This is a library for interfacing to the MKS Servo42C closed-loop stepper via UART.
+This is a library for interfacing to the MKS Servo42C closed-loop steppe motor via UART.
 
 See https://github.com/makerbase-mks/MKS-SERVO42C for details on the hardware.
 
