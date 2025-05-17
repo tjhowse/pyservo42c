@@ -174,3 +174,11 @@ class Servo42CTCPUartBridge(Servo42C):
         """
         response = self.send_command_get_response(self.save_or_clear_status_cmd(action))
         return self.save_or_clear_status_response(response)
+
+    def read_encoder_value(self) -> int:
+        """
+        Read the encoder value.
+        """
+        response = self.send_command_get_response(self.read_encoder_value_cmd())
+        print(response)
+        return self.read_encoder_value_response(response)

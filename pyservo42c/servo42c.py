@@ -160,12 +160,12 @@ class Servo42C:
 
         # Check if the response length is correct
         if len(data) != (expected_length if self.expect_checksum else expected_length - 1):
-            print("wrong length")
+            print(f"Wrong length. expected {expected_length}, got {len(data)}")
             return False
 
         # Check if the address matches
         if data[0] != self.address:
-            print("wrong address")
+            print(f"Wrong address. expected {self.address}, got {data[0]}")
             return False
 
         # Check if the checksum is valid
@@ -671,4 +671,50 @@ class Servo42C:
         if not self.verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
+
+    def read_param_cmd(self, param: ReadParams) -> bytes:
+        """
+        Returns the bytes to perform a read parameter command.
+        Bytes:
+            0: address
+            1: ReadParams.<param>
+            2: Checksum
+        """
+        data = bytearray(3)
+        data[0] = self.address
+        data[1] = param.value
+        data[2] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def read_param_response(self, data: bytes, expected_length: int) -> bytes:
+        """
+        Parses the response from the servo for a read parameter command.
+        Returns the parameter value as bytes if successful, otherwise raises an error.
+        """
+        if not self.verify_response(data, expected_length):
+            raise ValueError("Invalid response from servo")
+
+        # Return the parameter value (excluding address and checksum)
+        return data[1:-1] if self.expect_checksum else data[1:]
+
+    def read_encoder_value_cmd(self) -> bytes:
+        """
+        Returns the bytes to perform a read encoder value command.
+        Bytes:
+            0: address
+            1: ReadParams.ENCODER_VALUE
+            2: Checksum
+        """
+        return self.read_param_cmd(Servo42C.ReadParams.ENCODER_VALUE)
+
+    def read_encoder_value_response(self, data: bytes) -> int:
+        """
+        Parses the response from the servo for the read encoder value command.
+        Returns the encoder value as an integer if successful, otherwise raises an error.
+        """
+
+        result = self.read_param_response(data, 4)
+
+        return int.from_bytes(result, byteorder='big', signed=True)
 
