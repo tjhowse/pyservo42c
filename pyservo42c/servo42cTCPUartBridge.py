@@ -180,5 +180,4 @@ class Servo42CTCPUartBridge(Servo42C):
         Read the encoder value.
         """
         response = self.send_command_get_response(self.read_encoder_value_cmd())
-        print(response)
         return self.read_encoder_value_response(response)

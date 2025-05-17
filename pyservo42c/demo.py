@@ -29,10 +29,13 @@ def run_uart_test():
                 print("Failed to set angle")
             sleep(0.5)
 
+            print(s.read_encoder_value())
+
         except OSError as e:
             print(f"Error: Could not connect to the UART bridge: {e}")
             sleep(1)
             s.disconnect()
+            s = Servo42CTCPUartBridge(UART_BRIDGE_IP, UART_BRIDGE_PORT)
 
 if __name__ == "__main__":
     run_uart_test()
