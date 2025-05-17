@@ -145,8 +145,12 @@ class Servo42C:
         checksum = sum(data) & 0xFF
         return bytes([checksum])
 
-    def __init__(self, address=0xe0):
+    def __init__(self, address=0xe0, expect_checksum=False):
         self.address = address
+
+        # The spec indicates that the last byte of the response is a checksum,
+        # but this often does not arrive.
+        self.expect_checksum = expect_checksum
 
     def set_en_pin_mode_cmd(self, mode: int) -> bytes:
         """
@@ -793,6 +797,44 @@ class Servo42C:
         """
         Parses the response from the servo for the set_max_torque command.
         Returns True if the response is valid, False otherwise.
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def save_or_clear_status_cmd(self, action: SaveOrClearStatus) -> bytes:
+        """
+        Returns the bytes to perform a save_or_clear_status command.
+        Bytes:
+            0: address
+            1: Control.SAVE_OR_CLEAR_STATUS
+            2: Action (0xC8: Save, 0xCA: Clear)
+            3: Checksum
+        """
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.Control.SAVE_OR_CLEAR_STATUS.value
+        data[2] = action.value
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def save_or_clear_status_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the save_or_clear_status command.
+        Returns True if the response is valid, False otherwise.
+        Bytes:
+            0: address
+            1: Result (0x00: failure, 0x01: success)
+            2: Checksum
         """
         if len(data) != 3:
             return False

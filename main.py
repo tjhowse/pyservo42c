@@ -11,12 +11,16 @@ def run_uart_test():
     s.connect()
     while True:
         try:
+            s.save_or_clear_status_cmd(Servo42CUartBridge.SaveOrClearStatus.CLEAR)
             direction = 0
             while True:
-                speed = 127
-                pulseCount = 10
-                s.set_angle(Servo42CUartBridge.Direction.CLOCKWISE, speed, 100*16)
+                # s.set_angle(Servo42CUartBridge.Direction.CLOCKWISE, 100, 200*16)
+                if not s.set_constant_speed(Servo42CUartBridge.Direction.CLOCKWISE, 126):
+                    print("Failed to set constant speed")
+
                 sleep(0.5)
+                s.stop()
+                sleep(5)
         except OSError as e:
             print(f"Error: Could not connect to the UART bridge: {e}")
             sleep(1)
