@@ -715,6 +715,18 @@ class Servo42C:
         """
 
         result = self.read_param_response(data, 4)
-
-        return int.from_bytes(result, byteorder='big', signed=True)
+        # Something's not quite right here.
+        # b'\xfd\xdf'
+        # 64991
+        # b'\n\xe7'
+        # 2791
+        # b'\x06n'
+        # 1646
+        # b'\x07\x86'
+        # 1926
+        # b'\x13\x0b'
+        # 4875
+        # b'\x1e\x98'
+        # 7832
+        return int.from_bytes(result)
 
