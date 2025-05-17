@@ -1,0 +1,21 @@
+[project]
+name = "pyservo42c"
+version = "0.1.0"
+description = "A Python library for interfacing with the MKS Servo42C closed-loop stepper."
+authors = [
+    {name = "Travis Howse", email = "tjhowse@gmail.com"}
+    ]
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE.md"]
+readme = "README.md"
+keywords = ["servo", "stepper", "motor", "closed-loop", "MKS"]
+requires-python = ">=3.7"
+
+[project.urls]
+homepage = "https://github.com/tjhowse/pyservo42c"
+repository = "https://github.com/tjhowse/pyservo42c"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
