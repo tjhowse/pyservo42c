@@ -216,9 +216,12 @@ class Servo42C:
         data = bytearray(6)
         data[0] = self.address
         data[1] = Servo42C.Control.SET_ANGLE.value
-        data[2] = (direction << 7) | speed
+        data[2] = (direction.value << 7) | speed
         data[3] = (pulseCount >> 8) & 0xFF
         data[4] = pulseCount & 0xFF
+        # Does this command really have a variable length?
+        # The spec says the pulse count field can be 2-4 bytes.
+        # Not sure about this...
 
         # Calculate the checksum
         data[5] = Servo42C.calculate_checksum(data[:-1])[0]
