@@ -241,6 +241,161 @@ class Servo42C:
         # Check if the result is success
         return data[1] == 0x01
 
+    def set_subdivision_cmd(self, subdivision: int) -> bytes:
+        """
+        Returns the bytes to perform a set_subdivision command.
+        Bytes:
+            0: address
+            1: WriteParams.SET_SUBDIVISION
+            2: Subdivision (1-256)
+            3: Checksum
+        """
+        if not (1 <= subdivision <= 256):
+            raise ValueError("Subdivision must be between 1 and 256")
+
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.WriteParams.SET_SUBDIVISION.value
+        data[2] = subdivision if subdivision != 256 else 0x00  # 256 is represented as 0x00
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_subdivision_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_subdivision command.
+        Returns True if the response is valid, False otherwise.
+        Bytes:
+            0: address
+            1: Result (0x00: failure, 0x01: success)
+            2: Checksum
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_constant_speed_cmd(self, direction: Direction, speed: int) -> bytes:
+        """
+        Returns the bytes to perform a set_constant_speed command.
+        Bytes:
+            0: address
+            1: Control.CONSTANT_SPEED
+            2: Bit 0: Direction, 1-7: Speed
+            3: Checksum
+        """
+        if not (0 <= speed <= 127):
+            raise ValueError("Speed must be between 0 and 127")
+
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.Control.CONSTANT_SPEED.value
+        data[2] = (direction.value << 7) | speed
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_constant_speed_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_constant_speed command.
+        Returns True if the response is valid, False otherwise.
+        Bytes:
+            0: address
+            1: Result (0x00: failure, 0x01: success)
+            2: Checksum
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def stop_cmd(self) -> bytes:
+        """
+        Returns the bytes to perform a stop command.
+        Bytes:
+            0: address
+            1: Control.STOP
+            2: Checksum
+        """
+        data = bytearray(3)
+        data[0] = self.address
+        data[1] = Servo42C.Control.STOP.value
+        data[2] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def stop_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the stop command.
+        Returns True if the response is valid, False otherwise.
+        Bytes:
+            0: address
+            1: Result (0x00: failure, 0x01: success)
+            2: Checksum
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_motor_type_cmd(self, motor_type: MotorType) -> bytes:
+        """
+        Returns the bytes to perform a set_motor_type command.
+        Bytes:
+            0: address
+            1: WriteParams.SET_MOTOR_TYPE
+            2: Motor type (0x00: 0.9°, 0x01: 1.8°)
+            3: Checksum
+        """
+        data = bytearray(4)
+        data[0] = self.address
+        data[1] = Servo42C.WriteParams.SET_MOTOR_TYPE.value
+        data[2] = motor_type.value
+        data[3] = Servo42C.calculate_checksum(data[:-1])[0]
+
+        return bytes(data)
+
+    def set_motor_type_response(self, data: bytes) -> bool:
+        """
+        Parses the response from the servo for the set_motor_type command.
+        Returns True if the response is valid, False otherwise.
+        Bytes:
+            0: address
+            1: Result (0x00: failure, 0x01: success)
+            2: Checksum
+        """
+        if len(data) != 3:
+            return False
+
+        if data[0] != self.address:
+            return False
+
+        checksum = Servo42C.calculate_checksum(data[:-1])
+        if data[2] != checksum[0]:
+            return False
+
+        return data[1] == Servo42C.Result.SUCCESS.value
 
 
 class Servo42CUartBridge(Servo42C):
