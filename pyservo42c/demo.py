@@ -10,25 +10,24 @@ def run_uart_test():
     s = Servo42CTCPUartBridge(UART_BRIDGE_IP, UART_BRIDGE_PORT)
     while True:
         try:
-            while True:
-                if not s.save_or_clear_status_cmd(Servo42CTCPUartBridge.SaveOrClearStatus.CLEAR):
-                    print("Failed to clear status")
+            if not s.save_or_clear_status_cmd(Servo42CTCPUartBridge.SaveOrClearStatus.CLEAR):
+                print("Failed to clear status")
 
-                if not s.set_constant_speed(Servo42CTCPUartBridge.Direction.CLOCKWISE, 126):
-                    print("Failed to set constant speed")
-                sleep(1)
+            if not s.set_constant_speed(Servo42CTCPUartBridge.Direction.CLOCKWISE, 126):
+                print("Failed to set constant speed")
+            sleep(1)
 
-                if not s.stop():
-                    print("Failed to stop")
-                sleep(1)
+            if not s.stop():
+                print("Failed to stop")
+            sleep(1)
 
-                if not s.set_angle(Servo42CTCPUartBridge.Direction.CLOCKWISE, 127, 200*16):
-                    print("Failed to set angle")
-                sleep(0.5)
+            if not s.set_angle(Servo42CTCPUartBridge.Direction.CLOCKWISE, 127, 200*16):
+                print("Failed to set angle")
+            sleep(0.5)
 
-                if not s.set_angle(Servo42CTCPUartBridge.Direction.COUNTERCLOCKWISE, 127, 100*16):
-                    print("Failed to set angle")
-                sleep(0.5)
+            if not s.set_angle(Servo42CTCPUartBridge.Direction.COUNTERCLOCKWISE, 127, 100*16):
+                print("Failed to set angle")
+            sleep(0.5)
 
         except OSError as e:
             print(f"Error: Could not connect to the UART bridge: {e}")
