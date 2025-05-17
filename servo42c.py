@@ -7,30 +7,47 @@ class Servo42C:
         ENCODER_VALUE = 0x30
         RECEIVED_PULSE_COUNT = 0x33
         MOTOR_ANGLE = 0x36
-        # etc
+        MOTOR_ANGLE_ERROR = 0x39
+        EN_PIN_STATUS = 0x3A
+        MOTOR_STATUS = 0x3E
 
     class WriteParams(Enum):
         """ Enum for the write parameters. """
         CALIBRATION = 0x80
-        # etc
+        SET_MOTOR_TYPE = 0x81
+        SET_WORK_MODE = 0x82
+        SET_CURRENT_GEAR = 0x83
+        SET_SUBDIVISION = 0x84
+        SET_EN_PIN_ACTIVE = 0x85
+        SET_MOTOR_DIRECTION = 0x86
+        SET_AUTO_SCREEN_OFF = 0x87
+        SET_STALL_PROTECTION = 0x88
+        SET_SUBDIVISION_INTERPOLATION = 0x89
+        SET_BAUD_RATE = 0x8A
+        SET_UART_ADDRESS = 0x8B
 
     class ZeroModeParams(Enum):
         """ Enum for the zero mode parameters. """
         ZERO_MODE = 0x90
-        # etc
+        ZERO_POSITION = 0x91
+        ZERO_SPEED = 0x92
+        ZERO_DIRECTION = 0x93
+        RETURN_TO_ZERO = 0x94
 
     class PIDAccTorque(Enum):
         """ Enum for the PID, Acceleration, and Torque parameters. """
-        PID_KP = 0xA0
+        PID_KP = 0xA1
         PID_KI = 0xA2
         PID_KD = 0xA3
-        # etc
+        ACCELERATION = 0xA4
+        MAX_TORQUE = 0xA5
 
     class Control(Enum):
         """ Enum for the control parameters. """
         EN_PIN_MODE = 0xF3
         CONSTANT_SPEED = 0xF6
         STOP = 0xF7
+        SAVE_OR_CLEAR_STATUS = 0xFF
         SET_ANGLE = 0xFD
 
     class Direction(Enum):
