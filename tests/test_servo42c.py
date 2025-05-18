@@ -12,7 +12,9 @@ class TestServo42C(unittest.TestCase):
         self.assertEqual(result, bytes([0xE0, 0xF6, 0x01, 0xD7]))
 
         # Example: set_constant_speed_cmd(1, 1) -> [e0 f6 81 57]
-        result = self.servo._set_constant_speed_cmd(Servo42C.Direction.COUNTERCLOCKWISE, 1)
+        result = self.servo._set_constant_speed_cmd(
+            Servo42C.Direction.COUNTERCLOCKWISE, 1
+        )
         self.assertEqual(result, bytes([0xE0, 0xF6, 0x81, 0x57]))
 
     def test_set_angle_cmd(self):

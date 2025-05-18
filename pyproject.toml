@@ -20,6 +20,7 @@ dev = [
     "pytest",
     "build",
     "black",
+    "twine",
 ]
 
 serial = [
