@@ -8,6 +8,7 @@ class Servo42CTCPUartBridge(Servo42C):
     """
     def __init__(self, uart_bridge_ip: str, uart_bridge_port: int, address=0xe0):
         super().__init__(address)
+        super().set_readwriter(self.tcp_uart_readwriter)
         self.uart_bridge_ip = uart_bridge_ip
         self.uart_bridge_port = uart_bridge_port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -49,12 +50,20 @@ class Servo42CTCPUartBridge(Servo42C):
         self.sock.sendall(command)
         return self.sock.recv(8)
 
-    def set_angle(self, direction: Servo42C.Direction, speed: int, pulseCount: int) -> bool:
+    def tcp_uart_readwriter(self, command: bytes) -> bytes:
         """
-        Set the angle of the servo.
+        Send a command to the UART bridge and get the response.
         """
-        response = self.send_command_get_response(self._set_angle_cmd(direction, speed, pulseCount))
-        return self._set_angle_response(response)
+        self.connect()
+        self.sock.sendall(command)
+        return self.sock.recv(8)
+
+    # def set_angle(self, direction: Servo42C.Direction, speed: int, pulseCount: int) -> bool:
+    #     """
+    #     Set the angle of the servo.
+    #     """
+    #     response = self.send_command_get_response(self._set_angle_cmd(direction, speed, pulseCount))
+    #     return self._set_angle_response(response)
 
     def set_en_pin_mode(self, mode: int) -> bool:
         """

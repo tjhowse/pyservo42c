@@ -152,6 +152,15 @@ class Servo42C:
         # The spec indicates that the last byte of the response is a checksum,
         # but this does not seem to be the case in practice.
         self.expect_checksum = expect_checksum
+        self.readwriter = None
+
+    def set_readwriter(self, readwriter: Callable[[bytes], bytes]):
+        """
+        Set the readwriter function to be used for sending and receiving bytes to the motor.
+        The readwriter function should take a bytes object as input and return a bytes object.
+        If this is not set only the _cmd and _response functions will be functional.
+        """
+        self.readwriter = readwriter
 
     def _verify_response(self, data: bytes, expected_length: int) -> bool:
         """
@@ -248,6 +257,13 @@ class Servo42C:
         if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_angle(self, direction: Direction, speed: int, pulseCount: int) -> bool:
+        """
+        Set the angle of the servo.
+        """
+        response = self.readwriter(self._set_angle_cmd(direction, speed, pulseCount))
+        return self._set_angle_response(response)
 
     def _set_subdivision_cmd(self, subdivision: int) -> bytes:
         """
