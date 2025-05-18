@@ -53,131 +53,131 @@ class Servo42CTCPUartBridge(Servo42C):
         """
         Set the angle of the servo.
         """
-        response = self.send_command_get_response(self.set_angle_cmd(direction, speed, pulseCount))
-        return self.set_angle_response(response)
+        response = self.send_command_get_response(self._set_angle_cmd(direction, speed, pulseCount))
+        return self._set_angle_response(response)
 
     def set_en_pin_mode(self, mode: int) -> bool:
         """
         Set the EN pin mode.
         """
-        response = self.send_command_get_response(self.set_en_pin_mode_cmd(mode))
-        return self.set_en_pin_mode_response(response)
+        response = self.send_command_get_response(self._set_en_pin_mode_cmd(mode))
+        return self._set_en_pin_mode_response(response)
 
     def set_subdivision(self, subdivision: int) -> bool:
         """
         Set the subdivision value.
         """
-        response = self.send_command_get_response(self.set_subdivision_cmd(subdivision))
-        return self.set_subdivision_response(response)
+        response = self.send_command_get_response(self._set_subdivision_cmd(subdivision))
+        return self._set_subdivision_response(response)
 
     def set_constant_speed(self, direction: Servo42C.Direction, speed: int) -> bool:
         """
         Set the motor to run at a constant speed.
         """
-        response = self.send_command_get_response(self.set_constant_speed_cmd(direction, speed))
-        return self.set_constant_speed_response(response)
+        response = self.send_command_get_response(self._set_constant_speed_cmd(direction, speed))
+        return self._set_constant_speed_response(response)
 
     def stop(self) -> bool:
         """
         Stop the motor.
         """
-        response = self.send_command_get_response(self.stop_cmd())
-        return self.stop_response(response)
+        response = self.send_command_get_response(self._stop_cmd())
+        return self._stop_response(response)
 
     def set_motor_type(self, motor_type: Servo42C.MotorType) -> bool:
         """
         Set the motor type.
         """
-        response = self.send_command_get_response(self.set_motor_type_cmd(motor_type))
-        return self.set_motor_type_response(response)
+        response = self.send_command_get_response(self._set_motor_type_cmd(motor_type))
+        return self._set_motor_type_response(response)
 
     def set_work_mode(self, mode: Servo42C.WorkMode) -> bool:
         """
         Set the work mode of the motor.
         """
-        response = self.send_command_get_response(self.set_work_mode_cmd(mode))
-        return self.set_work_mode_response(response)
+        response = self.send_command_get_response(self._set_work_mode_cmd(mode))
+        return self._set_work_mode_response(response)
 
     def calibrate(self) -> bool:
         """
         Calibrate the motor.
         """
-        response = self.send_command_get_response(self.calibrate_cmd())
-        return self.calibrate_response(response)
+        response = self.send_command_get_response(self._calibrate_cmd())
+        return self._calibrate_response(response)
 
     def set_current_gear(self, gear: Servo42C.CurrentGear) -> bool:
         """
         Set the current gear.
         """
-        response = self.send_command_get_response(self.set_current_gear_cmd(gear))
-        return self.set_current_gear_response(response)
+        response = self.send_command_get_response(self._set_current_gear_cmd(gear))
+        return self._set_current_gear_response(response)
 
     def set_baud_rate(self, baud_rate: Servo42C.BaudRate) -> bool:
         """
         Set the UART baud rate.
         """
-        response = self.send_command_get_response(self.set_baud_rate_cmd(baud_rate))
-        return self.set_baud_rate_response(response)
+        response = self.send_command_get_response(self._set_baud_rate_cmd(baud_rate))
+        return self._set_baud_rate_response(response)
 
     def set_zero_mode(self, mode: Servo42C.ZeroMode) -> bool:
         """
         Set the zero mode.
         """
-        response = self.send_command_get_response(self.set_zero_mode_cmd(mode))
-        return self.set_zero_mode_response(response)
+        response = self.send_command_get_response(self._set_zero_mode_cmd(mode))
+        return self._set_zero_mode_response(response)
 
     def return_to_zero(self) -> bool:
         """
         Return the motor to zero position.
         """
-        response = self.send_command_get_response(self.return_to_zero_cmd())
-        return self.return_to_zero_response(response)
+        response = self.send_command_get_response(self._return_to_zero_cmd())
+        return self._return_to_zero_response(response)
 
     def set_pid_kp(self, kp: int) -> bool:
         """
         Set the PID Kp parameter.
         """
-        response = self.send_command_get_response(self.set_pid_kp_cmd(kp))
-        return self.set_pid_kp_response(response)
+        response = self.send_command_get_response(self._set_pid_kp_cmd(kp))
+        return self._set_pid_kp_response(response)
 
     def set_pid_ki(self, ki: int) -> bool:
         """
         Set the PID Ki parameter.
         """
-        response = self.send_command_get_response(self.set_pid_ki_cmd(ki))
-        return self.set_pid_ki_response(response)
+        response = self.send_command_get_response(self._set_pid_ki_cmd(ki))
+        return self._set_pid_ki_response(response)
 
     def set_pid_kd(self, kd: int) -> bool:
         """
         Set the PID Kd parameter.
         """
-        response = self.send_command_get_response(self.set_pid_kd_cmd(kd))
-        return self.set_pid_kd_response(response)
+        response = self.send_command_get_response(self._set_pid_kd_cmd(kd))
+        return self._set_pid_kd_response(response)
 
     def set_acceleration(self, acceleration: int) -> bool:
         """
         Set the acceleration parameter.
         """
-        response = self.send_command_get_response(self.set_acceleration_cmd(acceleration))
-        return self.set_acceleration_response(response)
+        response = self.send_command_get_response(self._set_acceleration_cmd(acceleration))
+        return self._set_acceleration_response(response)
 
     def set_max_torque(self, max_torque: int) -> bool:
         """
         Set the maximum torque parameter.
         """
-        response = self.send_command_get_response(self.set_max_torque_cmd(max_torque))
-        return self.set_max_torque_response(response)
+        response = self.send_command_get_response(self._set_max_torque_cmd(max_torque))
+        return self._set_max_torque_response(response)
 
     def save_or_clear_status(self, action: Servo42C.SaveOrClearStatus) -> bool:
         """
         Save or clear the status.
         """
-        response = self.send_command_get_response(self.save_or_clear_status_cmd(action))
-        return self.save_or_clear_status_response(response)
+        response = self.send_command_get_response(self._save_or_clear_status_cmd(action))
+        return self._save_or_clear_status_response(response)
 
     def read_encoder_value(self) -> int:
         """
         Read the encoder value.
         """
-        response = self.send_command_get_response(self.read_encoder_value_cmd())
-        return self.read_encoder_value_response(response)
+        response = self.send_command_get_response(self._read_encoder_value_cmd())
+        return self._read_encoder_value_response(response)

@@ -152,7 +152,7 @@ class Servo42C:
         # but this does not seem to be the case in practice.
         self.expect_checksum = expect_checksum
 
-    def verify_response(self, data: bytes, expected_length: int) -> bool:
+    def _verify_response(self, data: bytes, expected_length: int) -> bool:
         """
         Verify the response from the servo.
         Returns True if the response is valid, False otherwise.
@@ -177,7 +177,7 @@ class Servo42C:
 
         return True
 
-    def set_en_pin_mode_cmd(self, mode: int) -> bytes:
+    def _set_en_pin_mode_cmd(self, mode: int) -> bytes:
         """
             Returns the bytes to perform a set_en_pin_mode command.
             Bytes:
@@ -197,15 +197,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_en_pin_mode_response(self, data: bytes) -> bool:
+    def _set_en_pin_mode_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_en_pin_mode command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_angle_cmd(self, direction: Direction, speed: int, pulseCount: int) -> bytes:
+    def _set_angle_cmd(self, direction: Direction, speed: int, pulseCount: int) -> bytes:
         """
             Returns the bytes to perform a set_angle command.
             Bytes:
@@ -240,15 +240,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_angle_response(self, data: bytes) -> bool:
+    def _set_angle_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_angle command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_subdivision_cmd(self, subdivision: int) -> bytes:
+    def _set_subdivision_cmd(self, subdivision: int) -> bytes:
         """
         Returns the bytes to perform a set_subdivision command.
         Bytes:
@@ -268,15 +268,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_subdivision_response(self, data: bytes) -> bool:
+    def _set_subdivision_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_subdivision command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_constant_speed_cmd(self, direction: Direction, speed: int) -> bytes:
+    def _set_constant_speed_cmd(self, direction: Direction, speed: int) -> bytes:
         """
         Returns the bytes to perform a set_constant_speed command.
         Bytes:
@@ -296,15 +296,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_constant_speed_response(self, data: bytes) -> bool:
+    def _set_constant_speed_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_constant_speed command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def stop_cmd(self) -> bytes:
+    def _stop_cmd(self) -> bytes:
         """
         Returns the bytes to perform a stop command.
         Bytes:
@@ -319,15 +319,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def stop_response(self, data: bytes) -> bool:
+    def _stop_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the stop command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_motor_type_cmd(self, motor_type: MotorType) -> bytes:
+    def _set_motor_type_cmd(self, motor_type: MotorType) -> bytes:
         """
         Returns the bytes to perform a set_motor_type command.
         Bytes:
@@ -344,15 +344,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_motor_type_response(self, data: bytes) -> bool:
+    def _set_motor_type_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_motor_type command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_work_mode_cmd(self, mode: WorkMode) -> bytes:
+    def _set_work_mode_cmd(self, mode: WorkMode) -> bytes:
         """
         Returns the bytes to perform a set_work_mode command.
         Bytes:
@@ -369,15 +369,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_work_mode_response(self, data: bytes) -> bool:
+    def _set_work_mode_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_work_mode command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def calibrate_cmd(self) -> bytes:
+    def _calibrate_cmd(self) -> bytes:
         """
         Returns the bytes to perform a calibration command.
         Bytes:
@@ -394,15 +394,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def calibrate_response(self, data: bytes) -> bool:
+    def _calibrate_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the calibration command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_current_gear_cmd(self, gear: CurrentGear) -> bytes:
+    def _set_current_gear_cmd(self, gear: CurrentGear) -> bytes:
         """
         Returns the bytes to perform a set_current_gear command.
         Bytes:
@@ -419,15 +419,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_current_gear_response(self, data: bytes) -> bool:
+    def _set_current_gear_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_current_gear command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_baud_rate_cmd(self, baud_rate: BaudRate) -> bytes:
+    def _set_baud_rate_cmd(self, baud_rate: BaudRate) -> bytes:
         """
         Returns the bytes to perform a set_baud_rate command.
         Bytes:
@@ -444,15 +444,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_baud_rate_response(self, data: bytes) -> bool:
+    def _set_baud_rate_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_baud_rate command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_zero_mode_cmd(self, mode: ZeroMode) -> bytes:
+    def _set_zero_mode_cmd(self, mode: ZeroMode) -> bytes:
         """
         Returns the bytes to perform a set_zero_mode command.
         Bytes:
@@ -469,15 +469,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_zero_mode_response(self, data: bytes) -> bool:
+    def _set_zero_mode_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_zero_mode command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def return_to_zero_cmd(self) -> bytes:
+    def _return_to_zero_cmd(self) -> bytes:
         """
         Returns the bytes to perform a return_to_zero command.
         Bytes:
@@ -494,15 +494,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def return_to_zero_response(self, data: bytes) -> bool:
+    def _return_to_zero_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the return_to_zero command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_pid_kp_cmd(self, kp: int) -> bytes:
+    def _set_pid_kp_cmd(self, kp: int) -> bytes:
         """
         Returns the bytes to perform a set_pid_kp command.
         Bytes:
@@ -523,15 +523,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_pid_kp_response(self, data: bytes) -> bool:
+    def _set_pid_kp_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_pid_kp command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_pid_ki_cmd(self, ki: int) -> bytes:
+    def _set_pid_ki_cmd(self, ki: int) -> bytes:
         """
         Returns the bytes to perform a set_pid_ki command.
         Bytes:
@@ -552,15 +552,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_pid_ki_response(self, data: bytes) -> bool:
+    def _set_pid_ki_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_pid_ki command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_pid_kd_cmd(self, kd: int) -> bytes:
+    def _set_pid_kd_cmd(self, kd: int) -> bytes:
         """
         Returns the bytes to perform a set_pid_kd command.
         Bytes:
@@ -581,15 +581,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_pid_kd_response(self, data: bytes) -> bool:
+    def _set_pid_kd_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_pid_kd command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_acceleration_cmd(self, acceleration: int) -> bytes:
+    def _set_acceleration_cmd(self, acceleration: int) -> bytes:
         """
         Returns the bytes to perform a set_acceleration command.
         Bytes:
@@ -610,15 +610,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_acceleration_response(self, data: bytes) -> bool:
+    def _set_acceleration_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_acceleration command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def set_max_torque_cmd(self, max_torque: int) -> bytes:
+    def _set_max_torque_cmd(self, max_torque: int) -> bytes:
         """
         Returns the bytes to perform a set_max_torque command.
         Bytes:
@@ -639,15 +639,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def set_max_torque_response(self, data: bytes) -> bool:
+    def _set_max_torque_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the set_max_torque command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def save_or_clear_status_cmd(self, action: SaveOrClearStatus) -> bytes:
+    def _save_or_clear_status_cmd(self, action: SaveOrClearStatus) -> bytes:
         """
         Returns the bytes to perform a save_or_clear_status command.
         Bytes:
@@ -664,15 +664,15 @@ class Servo42C:
 
         return bytes(data)
 
-    def save_or_clear_status_response(self, data: bytes) -> bool:
+    def _save_or_clear_status_response(self, data: bytes) -> bool:
         """
         Parses the response from the servo for the save_or_clear_status command.
         """
-        if not self.verify_response(data, 3):
+        if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def read_param_cmd(self, param: ReadParams) -> bytes:
+    def _read_param_cmd(self, param: ReadParams) -> bytes:
         """
         Returns the bytes to perform a read parameter command.
         Bytes:
@@ -687,18 +687,18 @@ class Servo42C:
 
         return bytes(data)
 
-    def read_param_response(self, data: bytes, expected_length: int) -> bytes:
+    def _read_param_response(self, data: bytes, expected_length: int) -> bytes:
         """
         Parses the response from the servo for a read parameter command.
         Returns the parameter value as bytes if successful, otherwise raises an error.
         """
-        if not self.verify_response(data, expected_length):
+        if not self._verify_response(data, expected_length):
             raise ValueError("Invalid response from servo")
 
         # Return the parameter value (excluding address and checksum)
         return data[1:-1] if self.expect_checksum else data[1:]
 
-    def read_encoder_value_cmd(self) -> bytes:
+    def _read_encoder_value_cmd(self) -> bytes:
         """
         Returns the bytes to perform a read encoder value command.
         Bytes:
@@ -706,15 +706,15 @@ class Servo42C:
             1: ReadParams.ENCODER_VALUE
             2: Checksum
         """
-        return self.read_param_cmd(Servo42C.ReadParams.ENCODER_VALUE)
+        return self._read_param_cmd(Servo42C.ReadParams.ENCODER_VALUE)
 
-    def read_encoder_value_response(self, data: bytes) -> int:
+    def _read_encoder_value_response(self, data: bytes) -> int:
         """
         Parses the response from the servo for the read encoder value command.
         Returns the encoder value as an integer if successful, otherwise raises an error.
         """
 
-        result = self.read_param_response(data, 4)
+        result = self._read_param_response(data, 4)
         # Something's not quite right here.
         # b'\xfd\xdf'
         # 64991

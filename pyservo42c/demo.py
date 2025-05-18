@@ -10,7 +10,7 @@ def run_uart_test():
     s = Servo42CTCPUartBridge(UART_BRIDGE_IP, UART_BRIDGE_PORT)
     while True:
         try:
-            if not s.save_or_clear_status_cmd(Servo42CTCPUartBridge.SaveOrClearStatus.CLEAR):
+            if not s._save_or_clear_status_cmd(Servo42CTCPUartBridge.SaveOrClearStatus.CLEAR):
                 print("Failed to clear status")
 
             if not s.set_constant_speed(Servo42CTCPUartBridge.Direction.CLOCKWISE, 126):
