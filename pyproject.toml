@@ -1,6 +1,6 @@
 [project]
 name = "pyservo42c"
-version = "0.1.0"
+version = "0.2.0"
 description = "A Python library for interfacing with the MKS Servo42C closed-loop stepper."
 authors = [
     {name = "Travis Howse", email = "tjhowse@gmail.com"}
