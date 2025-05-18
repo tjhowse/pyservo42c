@@ -1,8 +1,9 @@
 from enum import Enum
+from collections.abc import Callable
 
 class Servo42C:
     """
-    This implement the Servo42C protocol.
+    This implements the Servo42C protocol.
     https://github.com/makerbase-mks/MKS-SERVO42C/wiki/Serial-communication-description
     """
 
