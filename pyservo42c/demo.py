@@ -8,18 +8,32 @@ from servo42cUart import Servo42CUart
 UART_BRIDGE_IP = "192.168.10.248"
 UART_BRIDGE_PORT = 6638
 
-def run_tcp_uart_test():
+COM_PORT = "/dev/ttyUSB0"
+BAUD_RATE = 9600
+
+def run_tcp_uart_demo():
     s = Servo42CTCPUartBridge(UART_BRIDGE_IP, UART_BRIDGE_PORT)
     while True:
         try:
-            run_test(s)
+            run_demo(s)
         except Exception as e:
             print(f"Error: Could not connect to the UART bridge: {e}")
             sleep(1)
             s.disconnect()
             s = Servo42CTCPUartBridge(UART_BRIDGE_IP, UART_BRIDGE_PORT)
 
-def run_test(s: Servo42C):
+def run_uart_demo():
+    s = Servo42CUart(COM_PORT, BAUD_RATE)
+    while True:
+        try:
+            run_demo(s)
+        except Exception as e:
+            print(f"Error: Could not connect to the COM port: {e}")
+            sleep(1)
+            s.disconnect()
+            s = Servo42CUart(COM_PORT, BAUD_RATE)
+
+def run_demo(s: Servo42C):
     if not s._save_or_clear_status_cmd(Servo42CTCPUartBridge.SaveOrClearStatus.CLEAR):
         print("Failed to clear status")
 
@@ -44,4 +58,5 @@ def run_test(s: Servo42C):
 
 
 if __name__ == "__main__":
-    run_tcp_uart_test()
+    # run_tcp_uart_demo()
+    run_uart_demo()
