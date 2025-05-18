@@ -293,6 +293,13 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def set_subdivision(self, subdivision: int) -> bool:
+        """
+        Set the subdivision of the servo.
+        """
+        response = self.readwriter(self._set_subdivision_cmd(subdivision))
+        return self._set_subdivision_response(response)
+
     def _set_constant_speed_cmd(self, direction: Direction, speed: int) -> bytes:
         """
         Returns the bytes to perform a set_constant_speed command.
@@ -321,6 +328,13 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def set_constant_speed(self, direction: Direction, speed: int) -> bool:
+        """
+        Set the servo to move at a constant speed.
+        """
+        response = self.readwriter(self._set_constant_speed_cmd(direction, speed))
+        return self._set_constant_speed_response(response)
+
     def _stop_cmd(self) -> bytes:
         """
         Returns the bytes to perform a stop command.
@@ -343,6 +357,13 @@ class Servo42C:
         if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
+
+    def stop(self) -> bool:
+        """
+        Stop the servo.
+        """
+        response = self.readwriter(self._stop_cmd())
+        return self._stop_response(response)
 
     def _set_motor_type_cmd(self, motor_type: MotorType) -> bytes:
         """
@@ -369,6 +390,13 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def set_motor_type(self, motor_type: MotorType) -> bool:
+        """
+        Set the motor type of the servo.
+        """
+        response = self.readwriter(self._set_motor_type_cmd(motor_type))
+        return self._set_motor_type_response(response)
+
     def _set_work_mode_cmd(self, mode: WorkMode) -> bytes:
         """
         Returns the bytes to perform a set_work_mode command.
@@ -393,6 +421,13 @@ class Servo42C:
         if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_work_mode(self, mode: WorkMode) -> bool:
+        """
+        Set the work mode of the servo.
+        """
+        response = self.readwriter(self._set_work_mode_cmd(mode))
+        return self._set_work_mode_response(response)
 
     def _calibrate_cmd(self) -> bytes:
         """
@@ -419,6 +454,13 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def calibrate(self) -> bool:
+        """
+        Calibrate the servo.
+        """
+        response = self.readwriter(self._calibrate_cmd())
+        return self._calibrate_response(response)
+
     def _set_current_gear_cmd(self, gear: CurrentGear) -> bytes:
         """
         Returns the bytes to perform a set_current_gear command.
@@ -443,6 +485,13 @@ class Servo42C:
         if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_current_gear(self, gear: CurrentGear) -> bool:
+        """
+        Set the current gear of the servo.
+        """
+        response = self.readwriter(self._set_current_gear_cmd(gear))
+        return self._set_current_gear_response(response)
 
     def _set_baud_rate_cmd(self, baud_rate: BaudRate) -> bytes:
         """
@@ -469,6 +518,13 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def set_baud_rate(self, baud_rate: BaudRate) -> bool:
+        """
+        Set the baud rate of the servo.
+        """
+        response = self.readwriter(self._set_baud_rate_cmd(baud_rate))
+        return self._set_baud_rate_response(response)
+
     def _set_zero_mode_cmd(self, mode: ZeroMode) -> bytes:
         """
         Returns the bytes to perform a set_zero_mode command.
@@ -494,6 +550,13 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def set_zero_mode(self, mode: ZeroMode) -> bool:
+        """
+        Set the zero mode of the servo.
+        """
+        response = self.readwriter(self._set_zero_mode_cmd(mode))
+        return self._set_zero_mode_response(response)
+
     def _return_to_zero_cmd(self) -> bytes:
         """
         Returns the bytes to perform a return_to_zero command.
@@ -518,6 +581,13 @@ class Servo42C:
         if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
+
+    def return_to_zero(self) -> bool:
+        """
+        Return the servo to the zero position.
+        """
+        response = self.readwriter(self._return_to_zero_cmd())
+        return self._return_to_zero_response(response)
 
     def _set_pid_kp_cmd(self, kp: int) -> bytes:
         """
@@ -548,6 +618,13 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def set_pid_kp(self, kp: int) -> bool:
+        """
+        Set the proportional gain (Kp) of the PID controller.
+        """
+        response = self.readwriter(self._set_pid_kp_cmd(kp))
+        return self._set_pid_kp_response(response)
+
     def _set_pid_ki_cmd(self, ki: int) -> bytes:
         """
         Returns the bytes to perform a set_pid_ki command.
@@ -576,6 +653,13 @@ class Servo42C:
         if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_pid_ki(self, ki: int) -> bool:
+        """
+        Set the integral gain (Ki) of the PID controller.
+        """
+        response = self.readwriter(self._set_pid_ki_cmd(ki))
+        return self._set_pid_ki_response(response)
 
     def _set_pid_kd_cmd(self, kd: int) -> bytes:
         """
@@ -606,6 +690,13 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def set_pid_kd(self, kd: int) -> bool:
+        """
+        Set the derivative gain (Kd) of the PID controller.
+        """
+        response = self.readwriter(self._set_pid_kd_cmd(kd))
+        return self._set_pid_kd_response(response)
+
     def _set_acceleration_cmd(self, acceleration: int) -> bytes:
         """
         Returns the bytes to perform a set_acceleration command.
@@ -634,6 +725,13 @@ class Servo42C:
         if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
+
+    def set_acceleration(self, acceleration: int) -> bool:
+        """
+        Set the acceleration of the servo.
+        """
+        response = self.readwriter(self._set_acceleration_cmd(acceleration))
+        return self._set_acceleration_response(response)
 
     def _set_max_torque_cmd(self, max_torque: int) -> bytes:
         """
@@ -664,6 +762,13 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
+    def set_max_torque(self, max_torque: int) -> bool:
+        """
+        Set the maximum torque of the servo.
+        """
+        response = self.readwriter(self._set_max_torque_cmd(max_torque))
+        return self._set_max_torque_response(response)
+
     def _save_or_clear_status_cmd(self, action: SaveOrClearStatus) -> bytes:
         """
         Returns the bytes to perform a save_or_clear_status command.
@@ -688,6 +793,13 @@ class Servo42C:
         if not self._verify_response(data, 3):
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
+
+    def save_or_clear_status(self, action: SaveOrClearStatus) -> bool:
+        """
+        Save or clear the status of the servo.
+        """
+        response = self.readwriter(self._save_or_clear_status_cmd(action))
+        return self._save_or_clear_status_response(response)
 
     def _read_param_cmd(self, param: ReadParams) -> bytes:
         """
@@ -714,6 +826,13 @@ class Servo42C:
 
         # Return the parameter value (excluding address and checksum)
         return data[1:-1] if self.expect_checksum else data[1:]
+
+    def read_param(self, param: ReadParams) -> bytes:
+        """
+        Read a parameter from the servo.
+        """
+        response = self.readwriter(self._read_param_cmd(param))
+        return self._read_param_response(response, 3)
 
     def _read_encoder_value_cmd(self) -> bytes:
         """
@@ -746,4 +865,11 @@ class Servo42C:
         # b'\x1e\x98'
         # 7832
         return int.from_bytes(result)
+
+    def read_encoder_value(self) -> int:
+        """
+        Read the encoder value from the servo.
+        """
+        response = self.readwriter(self._read_encoder_value_cmd())
+        return self._read_encoder_value_response(response)
 
