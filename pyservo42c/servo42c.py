@@ -851,25 +851,13 @@ class Servo42C:
         """
 
         result = self._read_param_response(data, 4)
-        # Something's not quite right here.
-        # b'\xfd\xdf'
-        # 64991
-        # b'\n\xe7'
-        # 2791
-        # b'\x06n'
-        # 1646
-        # b'\x07\x86'
-        # 1926
-        # b'\x13\x0b'
-        # 4875
-        # b'\x1e\x98'
-        # 7832
         return int.from_bytes(result)
 
     def read_encoder_value(self) -> int:
         """
         Read the encoder value from the servo.
         """
+
         response = self.readwriter(self._read_encoder_value_cmd())
         return self._read_encoder_value_response(response)
 
