@@ -18,4 +18,5 @@ repository = "https://github.com/tjhowse/pyservo42c"
 [project.optional-dependencies]
 dev = [
     "pytest",
+    "pyserial",
 ]
