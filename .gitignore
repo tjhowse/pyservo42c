@@ -1,2 +1,5 @@
 .venv
 __pycache__
+build
+dist
+pyservo42c.egg-info

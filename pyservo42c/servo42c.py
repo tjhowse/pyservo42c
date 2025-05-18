@@ -1,6 +1,7 @@
 from enum import Enum
 from collections.abc import Callable
 
+
 class Servo42C:
     """
     This implements the Servo42C protocol.
@@ -8,7 +9,8 @@ class Servo42C:
     """
 
     class ReadParams(Enum):
-        """ Enum for the read parameters. """
+        """Enum for the read parameters."""
+
         ENCODER_VALUE = 0x30
         RECEIVED_PULSE_COUNT = 0x33
         MOTOR_ANGLE = 0x36
@@ -17,7 +19,8 @@ class Servo42C:
         MOTOR_STATUS = 0x3E
 
     class WriteParams(Enum):
-        """ Enum for the write parameters. """
+        """Enum for the write parameters."""
+
         CALIBRATION = 0x80
         SET_MOTOR_TYPE = 0x81
         SET_WORK_MODE = 0x82
@@ -32,7 +35,8 @@ class Servo42C:
         SET_UART_ADDRESS = 0x8B
 
     class ZeroModeParams(Enum):
-        """ Enum for the zero mode parameters. """
+        """Enum for the zero mode parameters."""
+
         ZERO_MODE = 0x90
         ZERO_POSITION = 0x91
         ZERO_SPEED = 0x92
@@ -40,7 +44,8 @@ class Servo42C:
         RETURN_TO_ZERO = 0x94
 
     class PIDAccTorque(Enum):
-        """ Enum for the PID, Acceleration, and Torque parameters. """
+        """Enum for the PID, Acceleration, and Torque parameters."""
+
         PID_KP = 0xA1
         PID_KI = 0xA2
         PID_KD = 0xA3
@@ -48,7 +53,8 @@ class Servo42C:
         MAX_TORQUE = 0xA5
 
     class Control(Enum):
-        """ Enum for the control parameters. """
+        """Enum for the control parameters."""
+
         EN_PIN_MODE = 0xF3
         CONSTANT_SPEED = 0xF6
         STOP = 0xF7
@@ -56,28 +62,33 @@ class Servo42C:
         SET_ANGLE = 0xFD
 
     class Direction(Enum):
-        """ Enum for the direction parameters. """
+        """Enum for the direction parameters."""
+
         CLOCKWISE = 0
         COUNTERCLOCKWISE = 1
 
     class Result(Enum):
-        """ Enum for common result values. """
+        """Enum for common result values."""
+
         SUCCESS = 0x01
         FAILURE = 0x00
 
     class MotorType(Enum):
-        """ Enum for motor types. """
+        """Enum for motor types."""
+
         DEGREE_0_9 = 0x00
         DEGREE_1_8 = 0x01
 
     class WorkMode(Enum):
-        """ Enum for work modes. """
+        """Enum for work modes."""
+
         CR_OPEN = 0x00
         CR_VFOC = 0x01
         CR_UART = 0x02
 
     class CurrentGear(Enum):
-        """ Enum for current gear values. """
+        """Enum for current gear values."""
+
         MA_0 = 0x00
         MA_200 = 0x01
         MA_400 = 0x02
@@ -93,28 +104,33 @@ class Servo42C:
         MA_2400 = 0x0C
 
     class EnPinActive(Enum):
-        """ Enum for En pin active states. """
+        """Enum for En pin active states."""
+
         ACTIVE_LOW = 0x00
         ACTIVE_HIGH = 0x01
         ACTIVE_ALWAYS = 0x02
 
     class AutoScreenOff(Enum):
-        """ Enum for auto screen off states. """
+        """Enum for auto screen off states."""
+
         DISABLE = 0x00
         ENABLE = 0x01
 
     class StallProtection(Enum):
-        """ Enum for stall protection states. """
+        """Enum for stall protection states."""
+
         DISABLE = 0x00
         ENABLE = 0x01
 
     class SubdivisionInterpolation(Enum):
-        """ Enum for subdivision interpolation states. """
+        """Enum for subdivision interpolation states."""
+
         DISABLE = 0x00
         ENABLE = 0x01
 
     class BaudRate(Enum):
-        """ Enum for baud rate values. """
+        """Enum for baud rate values."""
+
         BAUD_9600 = 0x01
         BAUD_19200 = 0x02
         BAUD_25000 = 0x03
@@ -123,18 +139,21 @@ class Servo42C:
         BAUD_115200 = 0x06
 
     class ZeroMode(Enum):
-        """ Enum for zero mode states. """
+        """Enum for zero mode states."""
+
         DISABLE = 0x00
         DIR_MODE = 0x01
         NEAR_MODE = 0x02
 
     class ZeroDirection(Enum):
-        """ Enum for zero direction values. """
+        """Enum for zero direction values."""
+
         CW = 0x00
         CCW = 0x01
 
     class SaveOrClearStatus(Enum):
-        """ Enum for save or clear status values. """
+        """Enum for save or clear status values."""
+
         SAVE = 0xC8
         CLEAR = 0xCA
 
@@ -146,7 +165,7 @@ class Servo42C:
         checksum = sum(data) & 0xFF
         return bytes([checksum])
 
-    def __init__(self, address=0xe0, expect_checksum=False):
+    def __init__(self, address=0xE0, expect_checksum=False):
         self.address = address
 
         # The spec indicates that the last byte of the response is a checksum,
@@ -169,7 +188,9 @@ class Servo42C:
         """
 
         # Check if the response length is correct
-        if len(data) != (expected_length if self.expect_checksum else expected_length - 1):
+        if len(data) != (
+            expected_length if self.expect_checksum else expected_length - 1
+        ):
             print(f"Wrong length. expected {expected_length}, got {len(data)}")
             return False
 
@@ -189,12 +210,12 @@ class Servo42C:
 
     def _set_en_pin_mode_cmd(self, mode: int) -> bytes:
         """
-            Returns the bytes to perform a set_en_pin_mode command.
-            Bytes:
-                0: address
-                1: Control.EN_PIN_MODE
-                2: Mode (0: Disable, 1: Enable)
-                3: Checksum
+        Returns the bytes to perform a set_en_pin_mode command.
+        Bytes:
+            0: address
+            1: Control.EN_PIN_MODE
+            2: Mode (0: Disable, 1: Enable)
+            3: Checksum
         """
         # Create the command bytes
         data = bytearray(4)
@@ -215,18 +236,20 @@ class Servo42C:
             return False
         return data[1] == Servo42C.Result.SUCCESS.value
 
-    def _set_angle_cmd(self, direction: Direction, speed: int, pulseCount: int) -> bytes:
+    def _set_angle_cmd(
+        self, direction: Direction, speed: int, pulseCount: int
+    ) -> bytes:
         """
-            Returns the bytes to perform a set_angle command.
-            Bytes:
-                0: address
-                1: Control.SET_ANGLE
-                2: Bit 0: Direction, 1-7: Speed
-                3-4: Pulse count
-                5: Checksum
+        Returns the bytes to perform a set_angle command.
+        Bytes:
+            0: address
+            1: Control.SET_ANGLE
+            2: Bit 0: Direction, 1-7: Speed
+            3-4: Pulse count
+            5: Checksum
 
-            Note: The spec claims the pulse count field can be 4 bytes long, but
-            this doesn't work in testing.
+        Note: The spec claims the pulse count field can be 4 bytes long, but
+        this doesn't work in testing.
         """
 
         # Check if speed is in the range 0-127
@@ -280,7 +303,9 @@ class Servo42C:
         data = bytearray(4)
         data[0] = self.address
         data[1] = Servo42C.WriteParams.SET_SUBDIVISION.value
-        data[2] = subdivision if subdivision != 256 else 0x00  # 256 is represented as 0x00
+        data[2] = (
+            subdivision if subdivision != 256 else 0x00
+        )  # 256 is represented as 0x00
         data[3] = Servo42C.calculate_checksum(data[:-1])[0]
 
         return bytes(data)
@@ -860,4 +885,3 @@ class Servo42C:
 
         response = self.readwriter(self._read_encoder_value_cmd())
         return self._read_encoder_value_response(response)
-

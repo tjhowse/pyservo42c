@@ -11,6 +11,7 @@ UART_BRIDGE_PORT = 6638
 COM_PORT = "/dev/ttyUSB0"
 BAUD_RATE = 9600
 
+
 def run_tcp_uart_demo():
     s = Servo42CTCPUartBridge(UART_BRIDGE_IP, UART_BRIDGE_PORT)
     while True:
@@ -22,6 +23,7 @@ def run_tcp_uart_demo():
             s.disconnect()
             s = Servo42CTCPUartBridge(UART_BRIDGE_IP, UART_BRIDGE_PORT)
 
+
 def run_uart_demo():
     s = Servo42CUart(COM_PORT, BAUD_RATE)
     while True:
@@ -32,6 +34,7 @@ def run_uart_demo():
             sleep(1)
             s.disconnect()
             s = Servo42CUart(COM_PORT, BAUD_RATE)
+
 
 def run_demo(s: Servo42C):
     if not s._save_or_clear_status_cmd(Servo42CTCPUartBridge.SaveOrClearStatus.CLEAR):
@@ -45,16 +48,15 @@ def run_demo(s: Servo42C):
         print("Failed to stop")
     sleep(1)
 
-    if not s.set_angle(Servo42CTCPUartBridge.Direction.CLOCKWISE, 127, 200*16):
+    if not s.set_angle(Servo42CTCPUartBridge.Direction.CLOCKWISE, 127, 200 * 16):
         print("Failed to set angle")
     sleep(0.5)
 
-    if not s.set_angle(Servo42CTCPUartBridge.Direction.COUNTERCLOCKWISE, 127, 100*16):
+    if not s.set_angle(Servo42CTCPUartBridge.Direction.COUNTERCLOCKWISE, 127, 100 * 16):
         print("Failed to set angle")
     sleep(0.5)
 
     print(s.read_encoder_value())
-
 
 
 if __name__ == "__main__":

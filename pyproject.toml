@@ -19,4 +19,6 @@ repository = "https://github.com/tjhowse/pyservo42c"
 dev = [
     "pytest",
     "pyserial",
+    "build",
+    "black",
 ]

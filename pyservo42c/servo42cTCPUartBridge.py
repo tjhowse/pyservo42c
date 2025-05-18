@@ -1,12 +1,14 @@
 import socket
 from servo42c import Servo42C
 
+
 class Servo42CTCPUartBridge(Servo42C):
     """
     This can be used to drive a servo42c over a UART bridge.
     Tested using github.com/oxan/esphome-stream-server on an ESP32.
     """
-    def __init__(self, uart_bridge_ip: str, uart_bridge_port: int, address=0xe0):
+
+    def __init__(self, uart_bridge_ip: str, uart_bridge_port: int, address=0xE0):
         super().__init__(address)
         super().set_readwriter(self.tcp_uart_readwriter)
         self.uart_bridge_ip = uart_bridge_ip
