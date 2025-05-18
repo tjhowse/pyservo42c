@@ -22,3 +22,13 @@ This wraps servo42c and provides an interface to a UART-over-TCP bridge, used fo
 ### servo42cUart
 
 This wraps servo42c and provides a direct interface to a UART port.
+
+# Implementation notes
+
+## TCP UART
+
+For fun, and to avoid trying to map to a windows COM port from WSL, I used an ESP32 running esphome and [esphome-stream-server](https://github.com/oxan/esphome-stream-server). This gives you a wireless UART port over wifi! Works great.
+
+## Raspberry Pi
+
+I tested this interface on an Raspberry Pi 3, but it should work on basically anything. I used `raspi-config` to enable the `/dev/ttyS0` UART port and used pins 6, 8 and 10 for GND, TX and RX.

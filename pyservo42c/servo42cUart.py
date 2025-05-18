@@ -26,7 +26,8 @@ class Servo42CUart(Servo42C):
                 self.com_port_identifier, self.baud_rate, timeout=1
             )
             self.connected = True
-        except serial.SerialException as e:
+        # The "serial" module on the Raspberry Pi does not have a "serial.SerialException" class.
+        except Exception as e:
             print(f"Error connecting to COM port: {e}")
             self.connected = False
             raise
