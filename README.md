@@ -25,6 +25,8 @@ This wraps servo42c and provides a direct interface to a UART port.
 
 # Implementation notes
 
+You'll need to use the OLED screen and buttons on the stepper to change the `MODE` to `CR_UART` to enable the UART port on the stepper. Set the baud rate accordingly if required. If you have multiple steppers on the same UART bus you should also set `UartAddr` to a unique value per stepper.
+
 ## TCP UART
 
 For fun, and to avoid trying to map to a windows COM port from WSL, I used an ESP32 running esphome and [esphome-stream-server](https://github.com/oxan/esphome-stream-server). This gives you a wireless UART port over wifi! Works great.
