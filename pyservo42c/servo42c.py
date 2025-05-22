@@ -876,7 +876,7 @@ class Servo42C:
         """
 
         result = self._read_param_response(data, 4)
-        return int.from_bytes(result)
+        return int.from_bytes(result, byteorder="big")
 
     def read_encoder_value(self) -> int:
         """

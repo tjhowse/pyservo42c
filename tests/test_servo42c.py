@@ -89,6 +89,21 @@ class TestServo42C(unittest.TestCase):
         # Example: set_max_torque_cmd(0x258) -> [e0 a5 02 58 df]
         result = self.servo._set_max_torque_cmd(0x258)
         self.assertEqual(result, bytes([0xE0, 0xA5, 0x02, 0x58, 0xDF]))
+    
+    def test_read_encoder_value_response(self):
+        # NB the spec indicates the last byte of the response should be
+        # a checksum. This is not so in practice.
+        data = [0xE0, 0x40, 0x11]
+        result = self.servo._read_encoder_value_response(data)
+        self.assertEqual(result, 16401)
+
+    def test_read_param_response(self):
+        # NB the spec indicates the last byte of the response should be
+        # a checksum. This is not so in practice.
+        # data = [0xE0, 0x01, 0xE1]
+        data = [0xE0, 0x01]
+        result = self.servo. _read_param_response(data, 3)
+        self.assertEqual(result, [0x01])
 
 
 if __name__ == "__main__":
