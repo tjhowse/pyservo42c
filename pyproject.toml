@@ -9,7 +9,7 @@ license = "GPL-3.0-or-later"
 license-files = ["LICENSE.md"]
 readme = "README.md"
 keywords = ["servo", "stepper", "motor", "closed-loop", "MKS"]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 
 [project.urls]
 homepage = "https://github.com/tjhowse/pyservo42c"
